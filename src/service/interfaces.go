@@ -12,6 +12,7 @@ type UserService interface {
 	LoginUser(req *pb.LoginRequest) (*pb.ResponseLogin, error)
 	GetAllUser(req *pb.GetAllUserRequest) (*pb.ResponseGetAllUser, error)
 	Delete(req *pb.DeleteRequest) (*pb.Response, error)
+	Update(req *pb.RequetUpdate) (*pb.Response, error)
 }
 
 type UserServiceImpl struct {

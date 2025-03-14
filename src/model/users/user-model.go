@@ -48,3 +48,16 @@ func (r *UserModel) DeleteUserByID(db *gorm.DB, userID uint) error {
 	}
 	return nil
 }
+
+func (r *UserModel) Update(db *gorm.DB, name string) error {
+	result := db.Table(USERS).Where("name = ?", name).Updates(map[string]interface{}{
+		"name": name,
+	})
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}

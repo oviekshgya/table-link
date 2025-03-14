@@ -137,3 +137,20 @@ func (service *UserServiceImpl) Delete(req *pb.DeleteRequest) (*pb.Response, err
 	}
 	return result.(*pb.Response), nil
 }
+
+func (service *UserServiceImpl) Update(req *pb.RequetUpdate) (*pb.Response, error) {
+	result, err := helper.WithTransaction(service.DB, func(tz *gorm.DB) (interface{}, error) {
+		modelUser := users.UserModel{}
+		if err := modelUser.Update(tz, req.Name); err != nil {
+			return nil, err
+		}
+		return &pb.Response{
+			Status:  true,
+			Message: "success",
+		}, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result.(*pb.Response), nil
+}

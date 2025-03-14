@@ -7,8 +7,12 @@ service UserService {
   rpc Login(LoginRequest) returns (ResponseLogin);
   rpc GetAllUser(GetAllUserRequest) returns (ResponseGetAllUser);
   rpc Delete(DeleteRequest) returns(Response);
+  rpc Update(RequetUpdate) returns (Response);
 }
 
+message RequetUpdate {
+  string Name = 1;
+}
 
 message DeleteRequest {
   int64 Id = 1;

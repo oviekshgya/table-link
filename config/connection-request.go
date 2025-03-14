@@ -39,3 +39,12 @@ func (s *Server) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.Respons
 	}
 	return result, nil
 }
+
+func (s *Server) Update(ctx context.Context, req *pb.RequetUpdate) (*pb.Response, error) {
+	result, err := UserService.Update(req)
+	if err != nil {
+		return nil, err
+
+	}
+	return result, nil
+}
