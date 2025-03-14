@@ -16,7 +16,8 @@ func (service *UserServiceImpl) CreateUser(req *pb.UserRequest) (*pb.Response, e
 
 	result, err := helper.WithTransaction(service.DB, func(tz *gorm.DB) (interface{}, error) {
 		modelUser := users.UserModel{}
-		roleid, _ := strconv.Atoi(req.GetRoleId())
+		roleid, _ := strconv.Atoi(req.RoleId)
+		fmt.Println(roleid)
 		hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 		if err != nil {
 			return nil, fmt.Errorf("encrypt password error: %s", err.Error())
