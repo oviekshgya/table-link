@@ -6,6 +6,12 @@ service UserService {
   rpc CreateUser (UserRequest) returns (Response);
   rpc Login(LoginRequest) returns (ResponseLogin);
   rpc GetAllUser(GetAllUserRequest) returns (ResponseGetAllUser);
+  rpc Delete(DeleteRequest) returns(Response);
+}
+
+
+message DeleteRequest {
+  int64 Id = 1;
 }
 
 message UserRequest {

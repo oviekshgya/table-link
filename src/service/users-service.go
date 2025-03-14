@@ -120,3 +120,20 @@ func (service *UserServiceImpl) GetAllUser(req *pb.GetAllUserRequest) (*pb.Respo
 	}
 	return result.(*pb.ResponseGetAllUser), nil
 }
+
+func (service *UserServiceImpl) Delete(req *pb.DeleteRequest) (*pb.Response, error) {
+	result, err := helper.WithTransaction(service.DB, func(tz *gorm.DB) (interface{}, error) {
+		modelUser := users.UserModel{}
+		if err := modelUser.DeleteUserByID(tz, uint(req.Id)); err != nil {
+			return nil, err
+		}
+		return &pb.Response{
+			Status:  true,
+			Message: "success",
+		}, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result.(*pb.Response), nil
+}

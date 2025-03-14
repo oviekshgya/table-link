@@ -37,3 +37,14 @@ func (s *UserModel) GetAll(db *gorm.DB) ([]Users, error) {
 	err := db.Preload("Role").Find(&users).Error
 	return users, err
 }
+
+func (r *UserModel) DeleteUserByID(db *gorm.DB, userID uint) error {
+	result := db.Delete(&Users{}, userID)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}

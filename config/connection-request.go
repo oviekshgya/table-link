@@ -30,3 +30,12 @@ func (s *Server) GetAllUser(ctx context.Context, req *pb.GetAllUserRequest) (*pb
 	}
 	return result, nil
 }
+
+func (s *Server) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.Response, error) {
+	result, err := UserService.Delete(req)
+	if err != nil {
+		return nil, err
+
+	}
+	return result, nil
+}
