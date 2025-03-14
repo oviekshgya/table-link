@@ -25,6 +25,7 @@ func (service ServicesHandlers) ConnGRPC() {
 
 	s := grpc.NewServer(
 		grpc.UnaryInterceptor(interceptor.NewAuthInterceptor("asdsada").Unary()),
+		grpc.UnaryInterceptor(interceptor.NewAuthInterceptor("asdsada").Role()),
 	)
 	pb.RegisterUserServiceServer(s, &Server{})
 	fmt.Println("CONNECTED: ", service.PortGRPC)

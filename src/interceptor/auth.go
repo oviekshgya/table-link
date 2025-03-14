@@ -50,3 +50,29 @@ func (a *AuthInterceptor) Unary() grpc.UnaryServerInterceptor {
 		return handler(ctx, req)
 	}
 }
+
+func (a *AuthInterceptor) Role() grpc.UnaryServerInterceptor {
+	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+
+		if strings.Contains(info.FullMethod, "/Login") || strings.Contains(info.FullMethod, "/CreateUser") {
+			return handler(ctx, req)
+		}
+
+		_, ok := metadata.FromIncomingContext(ctx)
+		if !ok {
+			return nil, errors.New("metadata not provided")
+		}
+
+		//check role
+		helper.Mu.Lock()
+		defer helper.Mu.Unlock()
+
+		for _, client := range helper.ListRoleData {
+			if client.Name == "ip" {
+				return nil, fmt.Errorf("permission Denied")
+			}
+		}
+
+		return handler(ctx, req)
+	}
+}
