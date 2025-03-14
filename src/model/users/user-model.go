@@ -38,8 +38,8 @@ func (s *UserModel) GetAll(db *gorm.DB) ([]Users, error) {
 	return users, err
 }
 
-func (r *UserModel) DeleteUserByID(db *gorm.DB, userID uint) error {
-	result := db.Delete(&Users{}, userID)
+func (r *UserModel) DeleteUserByID(db *gorm.DB, id int) error {
+	result := db.Where("id = ?", id).Delete(&Users{})
 	if result.Error != nil {
 		return result.Error
 	}

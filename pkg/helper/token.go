@@ -26,7 +26,7 @@ func GenerateToken(id uint, username string) (string, error) {
 func ValidateToken(tokenString string) (bool, uint, string, error) {
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte("SECRET_KEY"), nil
+		return []byte("supersecretkey"), nil
 	})
 
 	if err != nil {
