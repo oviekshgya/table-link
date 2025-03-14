@@ -8,7 +8,6 @@ import (
 const USERS = "users"
 
 type UserModel struct {
-	DB *gorm.DB
 }
 
 type Users struct {
@@ -23,18 +22,18 @@ func (Users) TableName() string {
 	return USERS
 }
 
-func (s *UserModel) Create(data Users) error {
-	return s.DB.Create(&data).Error
+func (s *UserModel) Create(db *gorm.DB, data Users) error {
+	return db.Create(&data).Error
 }
 
-func (s *UserModel) GetByUsername(username string) (*Users, error) {
+func (s *UserModel) GetByUsername(db *gorm.DB, username string) (*Users, error) {
 	var data Users
-	err := s.DB.Where("username = ?", username).First(&data).Error
+	err := db.Where("username = ?", username).First(&data).Error
 	return &data, err
 }
 
-func (s *UserModel) GetAll() ([]Users, error) {
+func (s *UserModel) GetAll(db *gorm.DB) ([]Users, error) {
 	var users []Users
-	err := s.DB.Preload("Role").Find(&users).Error
+	err := db.Preload("Role").Find(&users).Error
 	return users, err
 }

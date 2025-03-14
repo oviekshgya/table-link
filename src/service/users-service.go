@@ -22,7 +22,7 @@ func (service *UserServiceImpl) CreateUser(req *pb.UserRequest) (*pb.Response, e
 			return nil, fmt.Errorf("encrypt password error: %s", err.Error())
 		}
 
-		if created := modelUser.Create(users.Users{
+		if created := modelUser.Create(tz, users.Users{
 			RoleID:   uint(roleid),
 			Username: req.Email,
 			Password: string(hash),
@@ -49,7 +49,7 @@ func (service *UserServiceImpl) LoginUser(req *pb.LoginRequest) (*pb.ResponseLog
 		initialRedis := helper.InitializeRedis()
 
 		modelUser := users.UserModel{}
-		data, err := modelUser.GetByUsername(req.Email)
+		data, err := modelUser.GetByUsername(tz, req.Email)
 		if err != nil {
 			return nil, err
 		}
@@ -90,7 +90,7 @@ func (service *UserServiceImpl) GetAllUser(req *pb.GetAllUserRequest) (*pb.Respo
 			return &response, nil
 		}
 
-		data, err := modelUser.GetAll()
+		data, err := modelUser.GetAll(tz)
 		if err != nil {
 			return nil, err
 		}

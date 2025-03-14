@@ -10,5 +10,5 @@ import (
 var UserService service.UserService
 
 func StartService() {
-	UserService = service.NewUserService(users.UserModel{DB: domain.DB}, role.RoleModel{DB: domain.DB}, domain.DB)
+	UserService = service.NewUserService(users.UserModel{}, role.RoleModel{}, domain.DB)
 }
