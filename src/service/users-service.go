@@ -46,6 +46,8 @@ func (service *UserServiceImpl) CreateUser(req *pb.UserRequest) (*pb.Response, e
 
 func (service *UserServiceImpl) LoginUser(req *pb.LoginRequest) (*pb.ResponseLogin, error) {
 	result, err := helper.WithTransaction(service.DB, func(tz *gorm.DB) (interface{}, error) {
+		initialRedis := helper.InitializeRedis()
+
 		modelUser := users.UserModel{}
 		data, err := modelUser.GetByUsername(req.Email)
 		if err != nil {
@@ -58,6 +60,10 @@ func (service *UserServiceImpl) LoginUser(req *pb.LoginRequest) (*pb.ResponseLog
 		if err != nil {
 			return nil, err
 		}
+		if set := initialRedis.SetKey(fmt.Sprintf("login-%s", req.Email), generate, time.Duration(30*time.Second)); set != nil {
+			log.Println("set reddis error")
+		}
+
 		return &pb.ResponseLogin{
 			BaseResponse: &pb.Response{
 				Status:  true,
@@ -80,7 +86,7 @@ func (service *UserServiceImpl) GetAllUser(req *pb.GetAllUserRequest) (*pb.Respo
 		initialRedis := helper.InitializeRedis()
 
 		var response pb.ResponseGetAllUser
-		if get := initialRedis.GetKey(fmt.Sprint("getall"), &response); get == nil {
+		if get := initialRedis.GetKey(fmt.Sprintf("getall"), &response); get == nil {
 			return &response, nil
 		}
 
@@ -102,7 +108,7 @@ func (service *UserServiceImpl) GetAllUser(req *pb.GetAllUserRequest) (*pb.Respo
 
 		}
 
-		if set := initialRedis.SetKey(fmt.Sprint("getall"), &response, time.Duration(30*time.Second)); set != nil {
+		if set := initialRedis.SetKey(fmt.Sprintf("getall"), &response, time.Duration(30*time.Second)); set != nil {
 			log.Println("set reddis error")
 		}
 		return &response, nil
