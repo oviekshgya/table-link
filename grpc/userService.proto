@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+option go_package = "/pb";
+
+service UserService {
+  rpc CreateUser (UserRequest) returns (Response);
+  rpc Login(LoginRequest) returns (ResponseLogin);
+  rpc GetAllUser(GetAllUserRequest) returns (ResponseGetAllUser);
+}
+
+message UserRequest {
+  string RoleId = 1;
+  string Name = 2;
+  string Email = 3;
+  string Password = 4;
+}
+
+
+message Response {
+  bool Status = 1;
+  string Message = 2;
+}
+
+message LoginRequest{
+  string Email = 1;
+  string Password = 2;
+}
+
+message Data {
+  string AccessToken = 1;
+}
+
+
+message User {
+  string RoleId = 1;
+  string RoleName = 2;
+  string Name = 3;
+  string Email = 4;
+  string LastAccess = 5;
+}
+
+message ResponseLogin {
+  Response BaseResponse =1;
+  Data Data=2;
+}
+
+message ResponseGetAllUser {
+  Response Response = 1;
+  User Data = 2;
+}
+
+message GetAllUserRequest {
+  int64 Id =1;
+}
